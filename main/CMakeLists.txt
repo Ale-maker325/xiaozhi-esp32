@@ -84,7 +84,20 @@ set(EMOTE_RESOLUTION "320_240")
 
 # Add board files according to BOARD_TYPE
 # Set default assets if the board uses partition table V2
-if(CONFIG_BOARD_TYPE_BREAD_COMPACT_WIFI)
+# --- МОЯ ПЛАТА НАЧАЛО ---
+if(CONFIG_BOARD_TYPE_ESP_DIY_N16_R8)
+    set(BOARD_TYPE "esp_diy_N16_R8") # Указываем имя папки
+    set(BUILTIN_TEXT_FONT font_puhui_basic_14_1)
+    set(BUILTIN_ICON_FONT font_awesome_14_1)
+    set(DEFAULT_EMOJI_COLLECTION twemoji_32)
+elseif(CONFIG_BOARD_TYPE_ESP_DIY_N16_R8_ST7701)
+    set(BOARD_TYPE "esp_diy_N16R8_ST7701") # Указываем имя папки
+    set(BUILTIN_TEXT_FONT font_puhui_basic_20_4) # Крупный шрифт для 480x480
+    set(BUILTIN_ICON_FONT font_awesome_20_4) # Крупные иконки для 480x480
+    set(DEFAULT_EMOJI_COLLECTION twemoji_32)
+    # ПРИНУДИТЕЛЬНО ДОБАВЛЯЕМ ФАЙЛ, ЧТОБЫ ИСКЛЮЧИТЬ ОШИБКИ GLOB
+    list(APPEND SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/boards/esp_diy_N16R8_ST7701/esp_diy_N16R8_ST7701.cc")
+elseif(CONFIG_BOARD_TYPE_BREAD_COMPACT_WIFI)
     set(BOARD_TYPE "bread-compact-wifi")
     set(BUILTIN_TEXT_FONT font_puhui_basic_14_1)
     set(BUILTIN_ICON_FONT font_awesome_14_1)
@@ -648,6 +661,7 @@ file(GLOB BOARD_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/boards/${BOARD_TYPE}/*.c
 )
 list(APPEND SOURCES ${BOARD_SOURCES})
+list(APPEND INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/boards/${BOARD_TYPE})
 
 # Select audio processor according to Kconfig
 if(CONFIG_USE_AUDIO_PROCESSOR)
@@ -822,6 +836,8 @@ idf_component_register(SRCS ${SOURCES}
                         console
                         efuse
                         bt
+                        esp_lcd esp_lcd_st7701
+                        esp_io_expander_tca9554
                     )
 
 # Use target_compile_definitions to define BOARD_TYPE, BOARD_NAME

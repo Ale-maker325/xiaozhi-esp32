@@ -219,7 +219,7 @@ void GpioLed::OnStateChanged() {
         case kDeviceStateIdle:
             SetBrightness(IDLE_BRIGHTNESS);
             TurnOn();
-            // TurnOff();
+            // TurnOff(); //Чтобы в режиме ожидания светодиод не горел
             break;
         case kDeviceStateConnecting:
             SetBrightness(DEFAULT_BRIGHTNESS);
@@ -238,6 +238,7 @@ void GpioLed::OnStateChanged() {
         case kDeviceStateSpeaking:
             SetBrightness(SPEAKING_BRIGHTNESS);
             TurnOn();
+            //StartFadeTask(); //Чтобы при ответе он тоже плавно мигал
             break;
         case kDeviceStateUpgrading:
             SetBrightness(UPGRADING_BRIGHTNESS);
