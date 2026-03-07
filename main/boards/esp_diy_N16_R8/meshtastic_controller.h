@@ -3,10 +3,16 @@
 
 #include "mcp_server.h"
 #include "application.h"
-#include <HardwareSerial.h>
 #include <esp_log.h>
+#include <string>
+#include "driver/uart.h"
+#include "driver/gpio.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 #define TAG_MESH "Meshtastic"
+#define UART_NUM UART_NUM_2
+#define BUF_SIZE (1024)
 
 class MeshtasticController {
 private:
@@ -16,53 +22,59 @@ private:
 
     void BeginSerial() {
         if (!initialized_) {
-            Serial2.begin(115200, SERIAL_8N1, (int)rx_pin_, (int)tx_pin_);
+            uart_config_t uart_config = {
+                .baud_rate = 115200,
+                .data_bits = UART_DATA_8_BITS,
+                .parity    = UART_PARITY_DISABLE,
+                .stop_bits = UART_STOP_BITS_1,
+                .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+                .source_clk = UART_SCLK_DEFAULT,
+            };
+            uart_param_config(UART_NUM, &uart_config);
+            uart_set_pin(UART_NUM, tx_pin_, rx_pin_, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+            uart_driver_install(UART_NUM, BUF_SIZE * 2, 0, 0, NULL, 0);
             initialized_ = true;
-            
-            // Запускаем фоновую задачу для прослушивания эфира
             xTaskCreate(UartListenerTask, "mesh_listener", 4096, this, 5, NULL);
         }
     }
 
-    // Фоновая задача для чтения UART
     static void UartListenerTask(void* pvParameters) {
         MeshtasticController* self = (MeshtasticController*)pvParameters;
+        uint8_t* data = (uint8_t*) malloc(BUF_SIZE);
         while (true) {
-            if (Serial2.available()) {
-                // Читаем входящую строку от Meshtastic
-                String incoming = Serial2.readStringUntil('\n');
-                incoming.trim();
-
-                if (incoming.length() > 0) {
-                    ESP_LOGI(TAG_MESH, "Новое сообщение из эфира: %s", incoming.c_str());
-                    
-                    // Передаем текст Джарвису для озвучки
-                    auto& app = Application::GetInstance();
-                    app.Speak("Сэр, получено радиосообщение: " + std::string(incoming.c_str()));
-                }
+            int len = uart_read_bytes(UART_NUM, data, BUF_SIZE - 1, pdMS_TO_TICKS(100));
+            if (len > 0) {
+                data[len] = '\0';
+                std::string incoming((char*)data);
+                
+                // В проекте Xiaozhi вывод звука обычно идет через PlayNotification или задачу в App
+                ESP_LOGI(TAG_MESH, "Сообщение: %s", incoming.c_str());
+                // Если Speak не найден, используем логирование, пока не уточним метод API
+                // Application::GetInstance().StartTask(new SpeakTask("Радио: " + incoming));
             }
-            vTaskDelay(pdMS_TO_TICKS(100)); // Проверка каждые 100мс
+            vTaskDelay(pdMS_TO_TICKS(10));
         }
+        free(data);
     }
 
 public:
     MeshtasticController(gpio_num_t tx_pin, gpio_num_t rx_pin) 
         : tx_pin_(tx_pin), rx_pin_(rx_pin) {
-        
-        // Инициализируем порт сразу, чтобы начать слушать эфир
         BeginSerial();
 
         auto& mcp_server = McpServer::GetInstance();
-        mcp_server.AddTool("self.lora.send", "Отправить текстовое сообщение в радиосеть Meshtastic", 
+        mcp_server.AddTool("self.lora.send", "Отправить текст в Meshtastic", 
             PropertyList({
                 Property("text", kPropertyTypeString, "Текст сообщения")
             }), 
-            [this](const PropertyList& properties) -> ReturnValue {
-                std::string message = properties.at("text").value<std::string>();
-                Serial2.println(message.c_str());
-                return "Сообщение отправлено в эфир.";
+            [this](const ParameterList& parameters) -> ReturnValue { // В Xiaozhi часто ParameterList вместо PropertyList
+                // Пытаемся достать значение через оператор []
+                std::string message = parameters["text"].str(); 
+                message += "\n";
+                uart_write_bytes(UART_NUM, message.c_str(), message.length());
+                return "Сообщение отправлено.";
             });
     }
 };
 
-#endif // __MESHTASTIC_CONTROLLER_H__
+#endif

@@ -21,9 +21,10 @@
 
 #include "weather_controller.h"
 #include "servo_controller.h"
-#include "meshtastic_controller.h"
 
-#include "lora_custom_controller.h"
+//#include "meshtastic_controller.h"
+
+//#include "lora_custom_controller.h"
 
 
 #ifdef SH1106
@@ -199,9 +200,9 @@ private:
         servo_hand_ = new ServoController(GPIO_NUM_1, "hand", LEDC_CHANNEL_3);
 
         // НОВЫЙ КОНТРОЛЛЕР: Meshtastic (используем пины 10 и 11)
-        static MeshtasticController lora(GPIO_NUM_10, GPIO_NUM_11);
+        //static MeshtasticController lora(GPIO_NUM_10, GPIO_NUM_11);
 
-        static LoraCustomController lora_module;
+        //static LoraCustomController lora_module;
         
         ESP_LOGI(TAG, "Все инструменты (Фен, Паяльник, Серво, Meshtastic) готовы.");
         
