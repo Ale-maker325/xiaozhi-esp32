@@ -92,20 +92,11 @@ private:
     std::string device_name_;
 
 public:
-    /**
-     * КОНСТРУКТОР КЛАССА
-     * Вызывается один раз при создании объекта. 
-     * Принимает: номер пина, ID (для кода) и Имя (для людей/ИИ).
-     */
-    LampController(gpio_num_t gpio_num, const std::string& id, const std::string& name) 
-        // Список инициализации: записываем переданные значения в наши приватные переменные
-        : gpio_num_(gpio_num), device_id_(id), device_name_(name) {
-        
-        /**
-         * 1. НАСТРОЙКА ЖЕЛЕЗА (GPIO)
-         */
-        
-        // Создаем структуру конфигурации GPIO. Это стандартный способ настройки в ESP32.
+    LampController(gpio_num_t gpio_num) : gpio_num_(gpio_num) {
+        if (gpio_num_ == GPIO_NUM_NC) {
+            return;
+        }
+
         gpio_config_t config = {
             // Указываем, какой именно пин мы настраиваем. 
             // 1ULL << пин — это создание "битовой маски" (установка нужного бита в единицу).

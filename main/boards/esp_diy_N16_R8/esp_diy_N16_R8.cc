@@ -6,7 +6,8 @@
 #include "button.h"
 #include "config.h"
 #include "mcp_server.h"
-#include "lamp_controller.h"
+// #include "lamp_controller.h"
+#include "my_controller_gpio.h"
 
 //#include "led/single_led.h"
 // 1. Меняем инклуд в начале файла
