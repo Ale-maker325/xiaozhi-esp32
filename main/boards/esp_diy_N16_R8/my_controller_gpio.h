@@ -67,8 +67,9 @@
 /**
  * Класс LampController — это "чертеж" объекта, который умеет управлять одной конкретной 
  * железкой (лампой, паяльником и т.д.) и "рассказывать" о ней ИИ-модели через протокол MCP.
+ * Controller_GPIO
  */
-class LampController {
+class Controller_GPIO {
 private:
     /**
      * ПРИВАТНЫЕ ПЕРЕМЕННЫЕ (Состояние объекта)
@@ -97,7 +98,7 @@ public:
      * Вызывается один раз при создании объекта. 
      * Принимает: номер пина, ID (для кода) и Имя (для людей/ИИ).
      */
-    LampController(gpio_num_t gpio_num, const std::string& id, const std::string& name) 
+    Controller_GPIO(gpio_num_t gpio_num, const std::string& id, const std::string& name) 
         // Список инициализации: записываем переданные значения в наши приватные переменные
         : gpio_num_(gpio_num), device_id_(id), device_name_(name) {
         

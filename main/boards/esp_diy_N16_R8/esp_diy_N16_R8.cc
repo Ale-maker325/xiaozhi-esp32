@@ -24,7 +24,6 @@
 #include "servo_controller.h"
 
 //#include "meshtastic_controller.h"
-
 //#include "lora_custom_controller.h"
 
 
@@ -184,8 +183,8 @@ private:
     void InitializeTools() {
         // Создаем объекты статически, чтобы они жили всё время работы программы
         // Первый параметр — ID для системы (латиницей), второй — имя для Джарвиса (на русском)
-        static LampController solder(GPIO_NUM_18, "solder", "Паяльник");
-        static LampController dryer(GPIO_NUM_17, "dryer", "Фен");
+        static Controller_GPIO solder(GPIO_NUM_18, "solder", "Паяльник");
+        static Controller_GPIO dryer(GPIO_NUM_17, "dryer", "Фен");
 
         // Создаем объект погоды один раз
         static WeatherController weather;
