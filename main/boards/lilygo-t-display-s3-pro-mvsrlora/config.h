@@ -36,9 +36,9 @@
 #define DISPLAY_BL static_cast<gpio_num_t>(LCD_BL)
 #define DISPLAY_MIRROR_X true
 #define DISPLAY_MIRROR_Y false
-#define DISPLAY_SWAP_XY false
+#define DISPLAY_SWAP_XY true
 
-#define DISPLAY_OFFSET_X 0
+#define DISPLAY_OFFSET_X 20
 #define DISPLAY_OFFSET_Y 0
 
 #define DISPLAY_BACKLIGHT_PIN DISPLAY_BL

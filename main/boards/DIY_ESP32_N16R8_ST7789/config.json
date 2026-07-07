@@ -1,0 +1,12 @@
+{
+    "target": "esp32s3",
+    "builds": [
+        {
+            "name": "DIY_ESP-32_N16R8_ST7789",
+            "sdkconfig_append": [
+                "CONFIG_BOARD_TYPE_DIY_ESP32_N16R8_ST7789=y",
+                "CONFIG_LANGUAGE_RU_RU=y"
+            ]
+        }
+    ]
+}

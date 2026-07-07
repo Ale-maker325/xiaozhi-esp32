@@ -147,7 +147,8 @@ choice BOARD_TYPE
     prompt "Board Type"
     depends on XIAOZHI_NETWORK_WIFI
     # default BOARD_TYPE_BREAD_COMPACT_WIFI
-    default BOARD_TYPE_DIY_ESP32_N16R8_WIFI
+    # default BOARD_TYPE_DIY_ESP32_N16R8_WIFI
+    default BOARD_TYPE_DIY_ESP32_N16R8_ST7789
     help
         Board type. 开发板类型
     config BOARD_TYPE_BREAD_COMPACT_WIFI
@@ -155,6 +156,9 @@ choice BOARD_TYPE
         depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_DIY_ESP32_N16R8_WIFI
         bool "DIY ESP32 N16R8 WIFI (面包板)"
+        depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_DIY_ESP32_N16R8_ST7789
+        bool "DIY ESP32 N16R8 ST7789 1.9 (面包板)"
         depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_BREAD_COMPACT_WIFI_LCD
         bool "Bread Compact WiFi + LCD (面包板)"
@@ -715,9 +719,9 @@ choice DISPLAY_OLED_TYPE
 endchoice
 
 choice DISPLAY_LCD_TYPE
-    depends on BOARD_TYPE_BREAD_COMPACT_WIFI_LCD || BOARD_TYPE_BREAD_COMPACT_ESP32_LCD || BOARD_TYPE_CGC || BOARD_TYPE_BREAD_COMPACT_WIFI_CAM
+    depends on BOARD_TYPE_BREAD_COMPACT_WIFI_LCD || BOARD_TYPE_BREAD_COMPACT_ESP32_LCD || BOARD_TYPE_CGC || BOARD_TYPE_BREAD_COMPACT_WIFI_CAM || BOARD_TYPE_DIY_ESP32_N16R8_ST7789
     prompt "LCD Type"
-    default LCD_ST7789_240X320
+    default LCD_ST7789_170X320
     help
         LCD Display Type
     config LCD_ST7789_240X320

@@ -96,6 +96,11 @@ elseif(CONFIG_BOARD_TYPE_DIY_ESP32_N16R8_WIFI)
     set(BOARD_TYPE "DIY_ESP-32_N16R8_WIFI")
     set(BUILTIN_TEXT_FONT font_puhui_basic_14_1)
     set(BUILTIN_ICON_FONT font_awesome_14_1)
+elseif(CONFIG_BOARD_TYPE_DIY_ESP32_N16R8_ST7789)
+    set(BOARD_TYPE "DIY_ESP32_N16R8_ST7789")
+    set(BUILTIN_TEXT_FONT font_puhui_basic_16_4)   # ← меньший шрифт
+    set(BUILTIN_ICON_FONT font_awesome_16_4)
+    set(DEFAULT_EMOJI_COLLECTION twemoji_32)       # ← меньшие эмодзи
 elseif(CONFIG_BOARD_TYPE_BREAD_COMPACT_ML307)
     set(BOARD_TYPE "bread-compact-ml307")
     set(BUILTIN_TEXT_FONT font_puhui_basic_14_1)
