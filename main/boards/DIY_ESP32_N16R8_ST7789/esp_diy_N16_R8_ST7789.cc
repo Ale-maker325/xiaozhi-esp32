@@ -147,7 +147,14 @@ public:
         InitializeButtons();
         InitializeTools();
 
-        GetBacklight()->SetBrightness(100);   // Включаем подсветку
+        // Максимально стабильная подсветка
+        auto* bl = GetBacklight();
+        if (bl) {
+            bl->SetBrightness(100);
+            bl->RestoreBrightness();
+        }
+
+        ESP_LOGI(TAG, "Display backlight stabilized");
 
         Settings mqtt_settings("mqtt", true);
         mqtt_settings.SetInt("keepalive", 60);
@@ -180,7 +187,7 @@ public:
 
         if (net_type == NetworkType::WIFI) {
             DualNetworkBoard::SetPowerSaveLevel(PowerSaveLevel::PERFORMANCE);
-            ESP_LOGI(TAG, "Wi-Fi: PERFORMANCE");
+            ESP_LOGI(TAG, "Wi-Fi: PERFORMANCE (для стабильности экрана)");
         } else {
             DualNetworkBoard::SetPowerSaveLevel(PowerSaveLevel::BALANCED);
             ESP_LOGI(TAG, "ML307: BALANCED");
@@ -204,7 +211,7 @@ public:
     }
 
     virtual Backlight* GetBacklight() override {
-        static PwmBacklight backlight(DISPLAY_BACKLIGHT_PIN, false);
+        static PwmBacklight backlight(DISPLAY_BACKLIGHT_PIN, DISPLAY_BACKLIGHT_OUTPUT_INVERT);
         return &backlight;
     }
 };

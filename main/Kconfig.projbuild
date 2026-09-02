@@ -147,8 +147,8 @@ choice BOARD_TYPE
     prompt "Board Type"
     depends on XIAOZHI_NETWORK_WIFI
     # default BOARD_TYPE_BREAD_COMPACT_WIFI
-    # default BOARD_TYPE_DIY_ESP32_N16R8_WIFI
-    default BOARD_TYPE_DIY_ESP32_N16R8_ST7789
+    default BOARD_TYPE_DIY_ESP32_N16R8_WIFI
+    # default BOARD_TYPE_DIY_ESP32_N16R8_ST7789
     help
         Board type. 开发板类型
     config BOARD_TYPE_BREAD_COMPACT_WIFI

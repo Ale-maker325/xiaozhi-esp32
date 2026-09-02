@@ -49,7 +49,7 @@
 #define DISPLAY_SCL_PIN         GPIO_NUM_12   // SCLK
 #define DISPLAY_DC_PIN          GPIO_NUM_11
 #define DISPLAY_CS_PIN          GPIO_NUM_10
-#define DISPLAY_RESET_PIN         GPIO_NUM_1
+#define DISPLAY_RESET_PIN       GPIO_NUM_1
 #define DISPLAY_BACKLIGHT_PIN   GPIO_NUM_14
 
 #define DISPLAY_SPI_HOST        SPI3_HOST   // ← важно!
@@ -57,11 +57,12 @@
 #define DISPLAY_HEIGHT          170
 
 #define DISPLAY_OFFSET_X        0      // ← важно!
-#define DISPLAY_OFFSET_Y        40
+#define DISPLAY_OFFSET_Y        35
 #define DISPLAY_SWAP_XY         true
 #define DISPLAY_MIRROR_X        true
 #define DISPLAY_MIRROR_Y        false
 #define DISPLAY_RGB_ORDER       LCD_RGB_ELEMENT_ORDER_BGR
+#define DISPLAY_BACKLIGHT_OUTPUT_INVERT true
 
 
 // =============================================================================
